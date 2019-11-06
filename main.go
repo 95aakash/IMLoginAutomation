@@ -5,17 +5,20 @@ import (
 	"reflect"
 	// "time"
 	"crypto/rand"
-    "encoding/base64"
+	"encoding/base64"
+	
 	"fmt"
 	"io/ioutil"
-    // "os"
+    "os"
 	"net/http"
+	"github.com/joho/godotenv"
+    "log"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"database/sql"
    _ "github.com/lib/pq"
    "strings"
-   "log"
+  
 )
 
 func init() {
@@ -43,25 +46,29 @@ func init() {
 	  }
 	
 	  fmt.Println("Successfully connected!")
-}
-var cid = "1045104154777-qpo2aust2h8sl8rtjpvqnnlt6pr4mfpa.apps.googleusercontent.com"
-var csecret = "xDIGP6Wi1YOdDO_4FxZEk830"
-var conf = &oauth2.Config{
-	// ClientID:  os.Getenv("client_id"),
-	ClientID: cid,
-	ClientSecret: csecret,
 	
+	
+}
+var err = godotenv.Load()
+var CID = os.Getenv("CLIENT_ID")
+var SECRET = os.Getenv("CLIENT_SECRET")
+
+
+  var conf = &oauth2.Config{
+	
+	ClientID: CID,
+	ClientSecret: SECRET,
 	RedirectURL: "http://127.0.0.1:8000/callback",
 	Scopes: []string{
 	"https://www.googleapis.com/auth/userinfo.email",
 	"https://www.googleapis.com/auth/userinfo.profile",
-
-},
-Endpoint: google.Endpoint,
+	},
+	Endpoint: google.Endpoint,
 }
 
 func main() {
 	fmt.Println("inside main confid ",conf.ClientID)
+	fmt.Println("inside main cid ",CID)
 	if conf.ClientID == ""{
 		fmt.Println("client id is null")
 	}else {
@@ -88,16 +95,16 @@ func main() {
 // fmt.Fprintf(w,"Now redirecting to login page")
 // fmt.Println("Now redirecting to login")
 // http.Redirect(w,r,"/login",http.StatusTemporaryRedirect)
-
-
 // }
 
 
 func handleMain(w http.ResponseWriter, r *http.Request) {
+	// fs := http.FileServer(http.Dir("static"))
+  	// http.Handle("/", fs)
 	var htmlstring string
 	htmlstring = `<html>
 	<body>
-		<a href="/login">Google Log In</a>
+		<a href="/login"><button>Login with Google!</button></a>
 	</body>
 	</html>`
 	fmt.Fprintf(w, htmlstring)

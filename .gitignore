@@ -1,8 +1,10 @@
 *.txt
 *.json
 db.go
-hello.go
+
 pattern.go
 app-env
-try.go
+
 cookie.go
+.env
+trial
