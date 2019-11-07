@@ -1,6 +1,7 @@
 *.txt
 *.json
 db.go
+dummy.html
 
 pattern.go
 app-env
@@ -8,3 +9,4 @@ app-env
 cookie.go
 .env
 trial
+trymain.go

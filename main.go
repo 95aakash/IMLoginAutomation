@@ -48,8 +48,13 @@ func main() {
 	http.HandleFunc("/", handleMain)
 	http.HandleFunc("/login", handleGoogleLogin)
 	http.HandleFunc("/callback", handleGoogleCallback)
+	// http.HandleFunc("/dummy", handleDummy)
 	log.Fatal(http.ListenAndServe(":8000", nil))
+
 }
+// func handleDummy(w http.ResponseWriter, r *http.Request){
+
+// }
 
 
 func handleMain(w http.ResponseWriter, r *http.Request) {
@@ -123,9 +128,9 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	
 
 	// fmt.Fprintf(w, "Welcome IM User")
-	http.Redirect(w,r, "https://github.com/95aakash/IMLoginAutomation",http.StatusTemporaryRedirect)  //redirecting an im user
+	// http.Redirect(w,r, "https://github.com/95aakash/IMLoginAutomation",http.StatusTemporaryRedirect)  //redirecting an im user
 	  
-
+	http.Redirect(w,r, "http://report.intermesh.net",http.StatusTemporaryRedirect)
 }
 
 func getUserInfo(oauthState string, code string) ([]byte, error) {
