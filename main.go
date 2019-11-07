@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"reflect"
-	// "time"
 	"crypto/rand"
 	"encoding/base64"
 	
@@ -15,38 +14,13 @@ import (
     "log"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"database/sql"
-   _ "github.com/lib/pq"
+
    "strings"
   
 )
 
 func init() {
 	fmt.Println("Initialising..")
-	const (
-		host     = "localhost"
-		port     = 5432
-		user     = "postgres"
-		password = "postgres"
-		dbname   = "testdb"
-	  )
-	  psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-	  "password=%s dbname=%s sslmode=disable",
-	  host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-
-	if err != nil {
-		panic(err)
-	  }
-	  defer db.Close()
-	
-	  err = db.Ping()
-	  if err != nil {
-		panic(err)
-	  }
-	
-	  fmt.Println("Successfully connected!")
-	
 	
 }
 var err = godotenv.Load()
@@ -68,34 +42,14 @@ var SECRET = os.Getenv("CLIENT_SECRET")
 
 func main() {
 	fmt.Println("inside main confid ",conf.ClientID)
-	fmt.Println("inside main cid ",CID)
-	if conf.ClientID == ""{
-		fmt.Println("client id is null")
-	}else {
-		fmt.Println("id not null")
-		}
+	
 
 	fmt.Println("inside main- going to start server")
 	http.HandleFunc("/", handleMain)
 	http.HandleFunc("/login", handleGoogleLogin)
 	http.HandleFunc("/callback", handleGoogleCallback)
-	// http.HandleFunc("/wrongUser", handleWrongUser)
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
-// func handleWrongUser(w http.ResponseWriter, r *http.Request){
-// // 	var htmlstring string
-// // 	htmlstring = `<html>
-// // <body>
-// // 	<h1>Not an IM User<h1>
-// // </body>
-// // </html>`
-
-// // fmt.Fprintf(w, htmlstring)
-// time.Sleep(3 * time.Second)
-// fmt.Fprintf(w,"Now redirecting to login page")
-// fmt.Println("Now redirecting to login")
-// http.Redirect(w,r,"/login",http.StatusTemporaryRedirect)
-// }
 
 
 func handleMain(w http.ResponseWriter, r *http.Request) {
@@ -113,6 +67,8 @@ func handleMain(w http.ResponseWriter, r *http.Request) {
 var state = randToken()
 func handleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("inside handleGoogleLogin")
+	cookie := http.Cookie{Name: "oauthstate", Value: state}//,Expires: expiration}
+    http.SetCookie(w, &cookie)
 	url := getLoginURL(state)
 	fmt.Println("Google Url is", url)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)  // redirecting to google login service
@@ -149,17 +105,9 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 
 	if !(strings.Contains(emailString,"@indiamart.com")){
 		fmt.Println("Not an indiamart id")
-		// w.Write([]byte("Not an Indiamart User, redirecting to login"))
-		// http.Redirect(w,r,"http://127.0.0.1:8000/",http.StatusTemporaryRedirect)
-		// 
-		var htmlstring string
-		htmlstring = `<html>
-		<body>
-			<h1>Not an IM User<h1>
-			<a href="/login">Go to Login again</a>
-		</body>
-		</html>`
-		fmt.Fprintf(w, htmlstring)
+		http.Redirect(w,r,"/",http.StatusTemporaryRedirect)
+	
+	
 		return
 	}
 
@@ -175,35 +123,7 @@ func handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	
 
 	// fmt.Fprintf(w, "Welcome IM User")
-	// http.Redirect(w,r, "http://127.0.0.1:8000/",http.StatusTemporaryRedirect)  //redirecting an im user
-
-	var htmlstring string
-	htmlstring = `<html>
-	<body>
-		<h1>Welcome IM User<h1>
-		<a href="https://github.com/golang/go/issues/14115">Click for redirection</a>
-	</body>
-	</html>`
-	fmt.Fprintf(w, htmlstring)
-	//database store
-	
-	// seen :=false
-	
-
-	// sqlStatement := `SELECT email FROM users WHERE email=$1;`
-	// var email string
-
-
-	// row := db.QueryRow(sqlStatement, //emailid )
-	// switch err := row.Scan(&id, &email); err {
-	// case sql.ErrNoRows:
-	// fmt.Println("No rows were returned!")
-	// case nil:
-	// fmt.Println(id, email)
-	// default:
-	// panic(err)
-	// }
-
+	http.Redirect(w,r, "https://github.com/95aakash/IMLoginAutomation",http.StatusTemporaryRedirect)  //redirecting an im user
 	  
 
 }
