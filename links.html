@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  <!-- <script type="text/javascript" src = "static/jquery.js"></script> -->  
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+</head>
+
+<body> <h1>Links page</h1>
+        <a href="http://report.intermesh.net/otp/OTPGenerationVerificationTestCases.html">Go to otp service1 </a>
+        <a href="http://report.intermesh.net/product/index.html">Go to otp service2 </a>
+        <a href="#">Go to otp service3 </a>
+        <a href="#">Go to otp service4 </a>
+    
+<!-- <script src="ajax.js"></script> -->
+<script>
+$("a[href^=http://report.intermesh.net/]").addClass("linkclass");
+
+$(document).ready(function(){
+    $(".linkclass").click(function(e){
+        e.preventDefault();
+        
+        alert($(this).attr('href'));  // getting href value
+
+        var objectData =
+         {
+             linktosend: $(this).attr('href')
+                            
+         };
+         var objectDataString = JSON.stringify(objectData);
+    // sending json data through ajax
+    $.ajax({
+            type: "POST",
+            url: "/service",
+            dataType: "json",
+            data: {
+                ajax_post_data: objectDataString
+            },
+            // success: function (data) {
+            //    alert('Success');
+
+            // },
+            // error: function () {
+            //  alert('Error');
+            // }
+        });
+
+});
+});
+</script>
+</body>
+</html>

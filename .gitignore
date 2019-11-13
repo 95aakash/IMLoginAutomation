@@ -2,11 +2,13 @@
 *.json
 db.go
 dummy.html
-
+abcwork.go
 pattern.go
 app-env
-
+truesess.go
 cookie.go
 .env
 trial
 trymain.go
+trymain2.go
+static
